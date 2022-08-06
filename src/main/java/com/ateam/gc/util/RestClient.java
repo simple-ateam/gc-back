@@ -2,7 +2,6 @@ package com.ateam.gc.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.request.GetRequest;
 import com.mashape.unirest.request.HttpRequest;
@@ -96,27 +95,7 @@ public class RestClient {
 		return withAuthInfo(request, path, customerId, apiKey, secretKey);
 	}
 
-	@SuppressWarnings("unchecked")
 	private <T extends HttpRequest> T withAuthInfo(T request, String path, long customerId, String apiKey, String secretKey) throws SignatureException {
-		String timestamp = String.valueOf(System.currentTimeMillis());
-
-		return (T) request
-				.header("X-Timestamp", timestamp)
-				.header("X-API-KEY", apiKey)
-				.header("X-Customer", String.valueOf(customerId))
-				.header("X-Signature", Signatures.of(timestamp, request.getHttpMethod().name(), path, secretKey));
+		return request;
 	}
-
-	public <T> T asObject(HttpResponse<String> response, Class<T> type) throws Exception {
-		String responseBody = response.getBody();
-		int status = response.getStatus();
-		if (status / 100 != 2) {
-			String message = response.getStatus() + " " + response.getStatusText()
-					+ ". X-Transaction-ID: " + response.getHeaders().getFirst("X-Transaction-ID")
-					+ ", Response Body: " + responseBody;
-			throw new Exception(message);
-		}
-		return responseBody == null ? null : OBJECT_MAPPER.readValue(responseBody, type);
-	}
-
 }
