@@ -30,14 +30,14 @@ public class MapServiceImpl implements MapService {
 
 	public List<GoCampingItem> findResult(double kilometer, double mapY, double mapX) {
 		List<GoCampingItem> result = new ArrayList<>();
-		ValueOperations operations = redisTemplate.opsForValue();
+		ValueOperations<String, String> operations = redisTemplate.opsForValue();
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
-		int apiTotalPageCount = Integer.parseInt(Objects.requireNonNull(operations.get(Constant.API_TOTAL_PAGE_COUNT)).toString());
+		int apiTotalPageCount = Integer.parseInt(Objects.requireNonNull(operations.get(Constant.API_TOTAL_PAGE_COUNT)));
 		for (int pageNo = 1; pageNo <= apiTotalPageCount; pageNo++) {
-			String str = operations.get(Constant.API_GO_CAMP_LIST + pageNo).toString();
+			String str = operations.get(Constant.API_GO_CAMP_LIST + pageNo);
 
 			JSONArray array = new JSONArray(str);
 			for (int j = 0; j < array.length(); j++) {
@@ -45,13 +45,13 @@ public class MapServiceImpl implements MapService {
 				double diff = MapUtil.distance(mapX, mapY, item.getDouble("mapX"), item.getDouble("mapY"));
 
 				if (kilometer > diff) {
-					logger.info(diff + "km 떨어짐 (합격) - " + item.getString("facltNm"));
+					logger.info("{}km 떨어짐 (합격) - {}", diff, item.getString("facltNm"));
 					try {
 						GoCampingItem goCampingItem = mapper.readValue(item.toString(), GoCampingItem.class);
 						goCampingItem.setDistance(diff);
 						result.add(goCampingItem);
 					} catch (JsonProcessingException e) {
-						logger.error("json parse error {}", item.toString());
+						logger.error("json parse error {}", item);
 					}
 				}
 			}
