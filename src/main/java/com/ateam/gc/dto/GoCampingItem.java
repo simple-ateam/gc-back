@@ -163,4 +163,6 @@ public class GoCampingItem {
 	@ApiModelProperty(value = "대표이미지") String firstImageUrl;
 	@ApiModelProperty(value = "등록일") String createdtime;
 	@ApiModelProperty(value = "수정일") String modifiedtime;
+
+	@ApiModelProperty(value = "거리(km)") double distance;
 }

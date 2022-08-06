@@ -2,6 +2,7 @@ package com.ateam.gc.service;
 
 import com.ateam.gc.common.Constant;
 import com.ateam.gc.dto.GoCampingItem;
+import com.ateam.gc.util.DistanceComparator;
 import com.ateam.gc.util.MapUtil;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -46,13 +47,16 @@ public class MapServiceImpl implements MapService {
 				if (kilometer > diff) {
 					logger.info(diff + "km 떨어짐 (합격) - " + item.getString("facltNm"));
 					try {
-						result.add(mapper.readValue(item.toString(), GoCampingItem.class));
+						GoCampingItem goCampingItem = mapper.readValue(item.toString(), GoCampingItem.class);
+						goCampingItem.setDistance(diff);
+						result.add(goCampingItem);
 					} catch (JsonProcessingException e) {
 						logger.error("json parse error {}", item.toString());
 					}
 				}
 			}
 		}
+		result.sort(new DistanceComparator());
 
 		return result;
 	}
