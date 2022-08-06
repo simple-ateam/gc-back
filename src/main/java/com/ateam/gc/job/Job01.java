@@ -20,15 +20,15 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class Job01 {
 
 	private static final Logger logger = LoggerFactory.getLogger(Job01.class);
 	private final RedisTemplate<String, String> redisTemplate;
 
 	@Scheduled(fixedDelay = Constant.COMMON_JOB_SEC)
-	public void runJob() throws IOException {
+	public void runJob() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		Calendar c1 = Calendar.getInstance();
 		String strToday = sdf.format(c1.getTime());
@@ -37,18 +37,22 @@ public class Job01 {
 		if (operations.get(Constant.API_GO_CAMP_CALL_DATE) == null
 				|| !strToday.equals(operations.get(Constant.API_GO_CAMP_CALL_DATE))
 		) {
-			operations.set(Constant.API_GO_CAMP_CALL_DATE, strToday);
-			int pageNo = 1;
-			int numOfRows = 100;
-			JSONArray array = new JSONArray();
-			JSONObject data;
-			do {
-				data = getData(pageNo, numOfRows);
-				pageNo++;
-				array.put(data.getJSONObject("response").getJSONObject("body"));
-				operations.set(Constant.API_GO_CAMP_LIST + (pageNo - 1), data.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item").toString());
-			} while (data.getJSONObject("response").getJSONObject("body").getInt("totalCount") > numOfRows * (pageNo - 1));
-			operations.set(Constant.API_TOTAL_PAGE_COUNT, String.valueOf(pageNo - 1));
+			try {
+				int pageNo = 1;
+				int numOfRows = 100;
+				JSONArray array = new JSONArray();
+				JSONObject data;
+				do {
+					data = getData(pageNo, numOfRows);
+					pageNo++;
+					array.put(data.getJSONObject("response").getJSONObject("body"));
+					operations.set(Constant.API_GO_CAMP_LIST + (pageNo - 1), data.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item").toString());
+				} while (data.getJSONObject("response").getJSONObject("body").getInt("totalCount") > numOfRows * (pageNo - 1));
+				operations.set(Constant.API_TOTAL_PAGE_COUNT, String.valueOf(pageNo - 1));
+				operations.set(Constant.API_GO_CAMP_CALL_DATE, strToday);
+			} catch (Exception e) {
+				logger.info("batch error {}", e.getMessage());
+			}
 		}
 	}
 
