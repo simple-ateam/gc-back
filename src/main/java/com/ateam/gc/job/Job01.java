@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -15,25 +17,39 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 @RequiredArgsConstructor
 @Component
 public class Job01 {
 
 	private static final Logger logger = LoggerFactory.getLogger(Job01.class);
+	private final RedisTemplate<String, String> redisTemplate;
 
 	@Scheduled(fixedDelay = Constant.COMMON_JOB_SEC)
 	public void runJob() throws IOException {
-		int pageNo = 1;
-		int numOfRows = 100;
-		JSONArray array = new JSONArray();
-		JSONObject data;
-		do {
-			data = getData(pageNo, numOfRows);
-			pageNo++;
-			array.put(data.getJSONObject("response").getJSONObject("body"));
-		} while (data.getJSONObject("response").getJSONObject("body").getInt("totalCount") > numOfRows * (pageNo - 1));
-		System.out.println(array);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		Calendar c1 = Calendar.getInstance();
+		String strToday = sdf.format(c1.getTime());
+
+		final ValueOperations<String, String> operations = redisTemplate.opsForValue();
+		if (operations.get(Constant.API_GO_CAMP_CALL_DATE) == null
+				|| !strToday.equals(operations.get(Constant.API_GO_CAMP_CALL_DATE))
+		) {
+			operations.set(Constant.API_GO_CAMP_CALL_DATE, strToday);
+			int pageNo = 1;
+			int numOfRows = 100;
+			JSONArray array = new JSONArray();
+			JSONObject data;
+			do {
+				data = getData(pageNo, numOfRows);
+				pageNo++;
+				array.put(data.getJSONObject("response").getJSONObject("body"));
+				operations.set(Constant.API_GO_CAMP_LIST + (pageNo - 1), data.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item").toString());
+			} while (data.getJSONObject("response").getJSONObject("body").getInt("totalCount") > numOfRows * (pageNo - 1));
+			operations.set(Constant.API_TOTAL_PAGE_COUNT, String.valueOf(pageNo - 1));
+		}
 	}
 
 	private JSONObject getData(int pageNo, int numOfRows) throws IOException {
