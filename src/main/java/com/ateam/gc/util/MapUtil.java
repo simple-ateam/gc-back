@@ -2,6 +2,10 @@ package com.ateam.gc.util;
 
 public class MapUtil {
 
+	private MapUtil() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	/**
 	 * 두 지점간의 거리 계산
 	 *

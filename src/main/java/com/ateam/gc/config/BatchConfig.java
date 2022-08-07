@@ -11,6 +11,6 @@ import javax.sql.DataSource;
 public class BatchConfig extends DefaultBatchConfigurer {
 	@Override
 	public void setDataSource(DataSource dataSource) {
-		// super.setDataSource(dataSource);
+		// Do nothing
 	}
 }
