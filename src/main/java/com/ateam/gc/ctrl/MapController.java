@@ -1,10 +1,10 @@
 package com.ateam.gc.ctrl;
 
+import com.ateam.gc.dto.GoCampSearchReqDTO;
+import com.ateam.gc.dto.GoCampingDetailItem;
 import com.ateam.gc.dto.GoCampingItem;
 import com.ateam.gc.service.MapService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,13 +19,15 @@ import java.util.List;
 @RestController
 public class MapController {
 
-	private static final Logger logger = LoggerFactory.getLogger(MapController.class);
 	private final MapService mapService;
 
-	@GetMapping(value = "/find/{kilometer}km/{mapY}/{mapX}")
-	public ResponseEntity<List<GoCampingItem>> main(@PathVariable("kilometer") double kilometer,
-													@PathVariable("mapY") double mapY,
-													@PathVariable("mapX") double mapX) {
-		return new ResponseEntity<>(mapService.findResult(kilometer, mapY, mapX), HttpStatus.OK);
+	@GetMapping(value = "/find")
+	public ResponseEntity<List<GoCampingItem>> main(GoCampSearchReqDTO param) {
+		return new ResponseEntity<>(mapService.findResult(param), HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/detail/{contentId}")
+	public ResponseEntity<GoCampingDetailItem> main(@PathVariable("contentId") String contentId) {
+		return new ResponseEntity<>(mapService.getDetail(contentId), HttpStatus.OK);
 	}
 }

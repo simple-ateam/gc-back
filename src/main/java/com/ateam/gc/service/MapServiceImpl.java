@@ -1,6 +1,8 @@
 package com.ateam.gc.service;
 
 import com.ateam.gc.common.Constant;
+import com.ateam.gc.dto.GoCampSearchReqDTO;
+import com.ateam.gc.dto.GoCampingDetailItem;
 import com.ateam.gc.dto.GoCampingItem;
 import com.ateam.gc.util.DistanceComparator;
 import com.ateam.gc.util.MapUtil;
@@ -28,7 +30,7 @@ public class MapServiceImpl implements MapService {
 	private static final Logger logger = LoggerFactory.getLogger(MapServiceImpl.class);
 	private final RedisTemplate<String, String> redisTemplate;
 
-	public List<GoCampingItem> findResult(double kilometer, double mapY, double mapX) {
+	public List<GoCampingItem> findResult(GoCampSearchReqDTO param) {
 		List<GoCampingItem> result = new ArrayList<>();
 		ValueOperations<String, String> operations = redisTemplate.opsForValue();
 		ObjectMapper mapper = new ObjectMapper();
@@ -42,9 +44,9 @@ public class MapServiceImpl implements MapService {
 			JSONArray array = new JSONArray(str);
 			for (int j = 0; j < array.length(); j++) {
 				JSONObject item = array.getJSONObject(j);
-				double diff = MapUtil.distance(mapX, mapY, item.getDouble("mapX"), item.getDouble("mapY"));
+				double diff = MapUtil.distance(param.getMapX(), param.getMapY(), item.getDouble("mapX"), item.getDouble("mapY"));
 
-				if (kilometer > diff) {
+				if (param.getKilometer() > diff) {
 					logger.info("{}km 떨어짐 (합격) - {}", diff, item.getString("facltNm"));
 					try {
 						GoCampingItem goCampingItem = mapper.readValue(item.toString(), GoCampingItem.class);
@@ -58,6 +60,35 @@ public class MapServiceImpl implements MapService {
 		}
 		result.sort(new DistanceComparator());
 
+		return result;
+	}
+
+	@Override
+	public GoCampingDetailItem getDetail(String contentId) {
+		GoCampingDetailItem result = null;
+		ValueOperations<String, String> operations = redisTemplate.opsForValue();
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+
+		int apiTotalPageCount = Integer.parseInt(Objects.requireNonNull(operations.get(Constant.API_TOTAL_PAGE_COUNT)));
+		for (int pageNo = 1; pageNo <= apiTotalPageCount; pageNo++) {
+			String str = operations.get(Constant.API_GO_CAMP_LIST + pageNo);
+
+			JSONArray array = new JSONArray(str);
+			for (int j = 0; j < array.length(); j++) {
+				JSONObject item = array.getJSONObject(j);
+				String itemContentId = item.getString("contentId");
+
+				if (contentId.equals(itemContentId)) {
+					try {
+						result = mapper.readValue(item.toString(), GoCampingDetailItem.class);
+					} catch (JsonProcessingException e) {
+						logger.error("json parse error {}", item);
+					}
+				}
+			}
+		}
 		return result;
 	}
 }
