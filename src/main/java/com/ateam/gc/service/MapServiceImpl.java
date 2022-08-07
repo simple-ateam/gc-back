@@ -2,8 +2,8 @@ package com.ateam.gc.service;
 
 import com.ateam.gc.common.Constant;
 import com.ateam.gc.dto.GoCampSearchReqDTO;
-import com.ateam.gc.dto.GoCampingDetailItem;
-import com.ateam.gc.dto.GoCampingItem;
+import com.ateam.gc.dto.GoCampDetailResDTO;
+import com.ateam.gc.dto.GoCampSearchResDTO;
 import com.ateam.gc.util.DistanceComparator;
 import com.ateam.gc.util.MapUtil;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -30,8 +30,8 @@ public class MapServiceImpl implements MapService {
 	private static final Logger logger = LoggerFactory.getLogger(MapServiceImpl.class);
 	private final RedisTemplate<String, String> redisTemplate;
 
-	public List<GoCampingItem> findResult(GoCampSearchReqDTO param) {
-		List<GoCampingItem> result = new ArrayList<>();
+	public List<GoCampSearchResDTO> findResult(GoCampSearchReqDTO param) {
+		List<GoCampSearchResDTO> result = new ArrayList<>();
 		ValueOperations<String, String> operations = redisTemplate.opsForValue();
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -49,9 +49,9 @@ public class MapServiceImpl implements MapService {
 				if (param.getKilometer() > diff) {
 					logger.info("{}km 떨어짐 (합격) - {}", diff, item.getString("facltNm"));
 					try {
-						GoCampingItem goCampingItem = mapper.readValue(item.toString(), GoCampingItem.class);
-						goCampingItem.setDistance(diff);
-						result.add(goCampingItem);
+						GoCampSearchResDTO goCampSearchResDTO = mapper.readValue(item.toString(), GoCampSearchResDTO.class);
+						goCampSearchResDTO.setDistance(diff);
+						result.add(goCampSearchResDTO);
 					} catch (JsonProcessingException e) {
 						logger.error("json parse error {}", item);
 					}
@@ -64,8 +64,8 @@ public class MapServiceImpl implements MapService {
 	}
 
 	@Override
-	public GoCampingDetailItem getDetail(String contentId) {
-		GoCampingDetailItem result = null;
+	public GoCampDetailResDTO getDetail(String contentId) {
+		GoCampDetailResDTO result = null;
 		ValueOperations<String, String> operations = redisTemplate.opsForValue();
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -82,7 +82,7 @@ public class MapServiceImpl implements MapService {
 
 				if (contentId.equals(itemContentId)) {
 					try {
-						result = mapper.readValue(item.toString(), GoCampingDetailItem.class);
+						result = mapper.readValue(item.toString(), GoCampDetailResDTO.class);
 					} catch (JsonProcessingException e) {
 						logger.error("json parse error {}", item);
 					}

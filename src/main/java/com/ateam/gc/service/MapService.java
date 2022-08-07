@@ -1,12 +1,12 @@
 package com.ateam.gc.service;
 
 import com.ateam.gc.dto.GoCampSearchReqDTO;
-import com.ateam.gc.dto.GoCampingDetailItem;
-import com.ateam.gc.dto.GoCampingItem;
+import com.ateam.gc.dto.GoCampDetailResDTO;
+import com.ateam.gc.dto.GoCampSearchResDTO;
 
 import java.util.List;
 
 public interface MapService {
-	List<GoCampingItem> findResult(GoCampSearchReqDTO param);
-	GoCampingDetailItem getDetail(String contentId);
+	List<GoCampSearchResDTO> findResult(GoCampSearchReqDTO param);
+	GoCampDetailResDTO getDetail(String contentId);
 }

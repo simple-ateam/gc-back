@@ -1,5 +1,6 @@
 package com.ateam.gc.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class GoCampingDetailItem {
+public class GoCampDetailResDTO {
 	@ApiModelProperty(value = "콘텐츠 ID")
 	String contentId;
 
@@ -208,7 +209,4 @@ public class GoCampingDetailItem {
 	String createdtime;
 	@ApiModelProperty(value = "수정일")
 	String modifiedtime;
-
-	@ApiModelProperty(value = "거리(km)")
-	double distance;
 }

@@ -10,13 +10,13 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class GoCampSearchReqDTO {
-	@ApiModelProperty(value = "반경(km)")
+	@ApiModelProperty(value = "반경(km)", example = "20")
 	double kilometer;
-	@ApiModelProperty(value = "위도(Y)")
+	@ApiModelProperty(value = "위도(Y)", example = "37.4922173")
 	double mapY;
-	@ApiModelProperty(value = "경도(X)")
+	@ApiModelProperty(value = "경도(X)", example = "126.8849478")
 	double mapX;
-	@ApiModelProperty(value = "축적도")
+	@ApiModelProperty(value = "축적도", example = "5")
 	double scale;
 
 }
