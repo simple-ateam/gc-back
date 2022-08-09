@@ -83,6 +83,7 @@ public class GoCampSearchResDTO {
 	@ApiModelProperty(value = "시군구")
 	String sigunguNm;
 
+	@JsonIgnore
 	@ApiModelProperty(value = "우편번호")
 	String zipcode;
 
