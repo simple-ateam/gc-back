@@ -4,6 +4,7 @@ import com.ateam.gc.common.Constant;
 import com.ateam.gc.dto.GoCampSearchReqDTO;
 import com.ateam.gc.dto.GoCampDetailResDTO;
 import com.ateam.gc.dto.GoCampSearchResDTO;
+import com.ateam.gc.service.common.EmptyDataException;
 import com.ateam.gc.util.DistanceComparator;
 import com.ateam.gc.util.MapUtil;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -64,7 +65,7 @@ public class MapServiceImpl implements MapService {
 	}
 
 	@Override
-	public GoCampDetailResDTO getDetail(String contentId) {
+	public GoCampDetailResDTO getDetail(String contentId) throws EmptyDataException {
 		GoCampDetailResDTO result = null;
 		ValueOperations<String, String> operations = redisTemplate.opsForValue();
 		ObjectMapper mapper = new ObjectMapper();
@@ -89,6 +90,9 @@ public class MapServiceImpl implements MapService {
 				}
 			}
 		}
+
+		if (result == null) throw new EmptyDataException();
+
 		return result;
 	}
 }

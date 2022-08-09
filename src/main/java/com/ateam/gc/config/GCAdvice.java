@@ -2,6 +2,7 @@ package com.ateam.gc.config;
 
 import com.ateam.gc.common.AjaxResult;
 import com.ateam.gc.common.Constant;
+import com.ateam.gc.service.common.EmptyDataException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,5 +17,10 @@ public class GCAdvice {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<AjaxResult<String>> exceptionAjaxResult(Exception e) {
 		return new ResponseEntity<>(AjaxResult.<String>builder().result(false).status(400).data(e.getMessage()).desc(e.getClass().getName()).build(), HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(EmptyDataException.class)
+	public ResponseEntity<AjaxResult<String>> exceptionAjaxResult(EmptyDataException e) {
+		return new ResponseEntity<>(AjaxResult.<String>builder().result(false).status(400).data(e.getMessage()).desc(Constant.DESC_EMPTY_ERROR).build(), HttpStatus.BAD_REQUEST);
 	}
 }
