@@ -1,12 +1,14 @@
 package com.ateam.gc.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+@ApiModel(value = "고캠프 검색 응답DTO", description = "고캠프 검색 응답DTO")
 @Setter
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)

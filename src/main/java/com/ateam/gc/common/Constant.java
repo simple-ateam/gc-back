@@ -7,6 +7,7 @@ public class Constant {
 	public static final String API_GO_CAMP_CALL_DATE = "go_camp_call_date";
 
 	public static final String API_ENCODING_TYPE = "UTF-8";
+	public static final String DESC_SUCCESS = "정상 처리되었습니다.";
 
 	private Constant() {
 		throw new IllegalStateException("Utility class");

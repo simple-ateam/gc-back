@@ -1,5 +1,6 @@
 package com.ateam.gc.ctrl;
 
+import com.ateam.gc.common.AjaxResult;
 import com.ateam.gc.dto.GoCampDetailResDTO;
 import com.ateam.gc.dto.GoCampSearchReqDTO;
 import com.ateam.gc.dto.GoCampSearchResDTO;
@@ -23,13 +24,14 @@ public class MapController {
 	private final MapService mapService;
 
 	@GetMapping(value = "/find")
-	public ResponseEntity<List<GoCampSearchResDTO>> main(GoCampSearchReqDTO param) {
-		return new ResponseEntity<>(mapService.findResult(param), HttpStatus.OK);
+	public ResponseEntity<AjaxResult<List<GoCampSearchResDTO>>> main(GoCampSearchReqDTO param) {
+		AjaxResult<List<GoCampSearchResDTO>> data = AjaxResult.<List<GoCampSearchResDTO>>builder().data(mapService.findResult(param)).build();
+		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/detail/{contentId}")
-	public ResponseEntity<GoCampDetailResDTO> main(
+	public ResponseEntity<AjaxResult<GoCampDetailResDTO>> main(
 			@PathVariable("contentId") @ApiParam(value = "콘텐츠 ID", example = "7323") String contentId) {
-		return new ResponseEntity<>(mapService.getDetail(contentId), HttpStatus.OK);
+		return new ResponseEntity<>(AjaxResult.<GoCampDetailResDTO>builder().data(mapService.getDetail(contentId)).build(), HttpStatus.OK);
 	}
 }

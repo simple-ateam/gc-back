@@ -1,12 +1,14 @@
 package com.ateam.gc.dto;
 
 import com.sun.istack.internal.NotNull;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+@ApiModel(value = "고캠프 검색 요청DTO", description = "고캠프 검색 요청DTO")
 @Setter
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
