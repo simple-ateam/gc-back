@@ -90,6 +90,7 @@ public class GoCampDetailResDTO {
 	@ApiModelProperty(value = "주소")
 	String addr1;
 
+	@JsonIgnore
 	@ApiModelProperty(value = "주소상세")
 	String addr2;
 
