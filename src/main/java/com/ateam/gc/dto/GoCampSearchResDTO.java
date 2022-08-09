@@ -1,5 +1,6 @@
 package com.ateam.gc.dto;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 @ApiModel(value = "고캠프 검색 응답DTO", description = "고캠프 검색 응답DTO")
 @Setter
 @Getter
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class GoCampSearchResDTO {
 	@ApiModelProperty(value = "콘텐츠 ID")

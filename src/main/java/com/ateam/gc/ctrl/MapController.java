@@ -9,22 +9,22 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/map")
 @RestController
+@Validated
 public class MapController {
 
 	private final MapService mapService;
 
 	@GetMapping(value = "/find")
-	public ResponseEntity<AjaxResult<List<GoCampSearchResDTO>>> main(GoCampSearchReqDTO param) {
+	public ResponseEntity<AjaxResult<List<GoCampSearchResDTO>>> main(@Valid @ModelAttribute GoCampSearchReqDTO param) {
 		AjaxResult<List<GoCampSearchResDTO>> data = AjaxResult.<List<GoCampSearchResDTO>>builder().data(mapService.findResult(param)).build();
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
