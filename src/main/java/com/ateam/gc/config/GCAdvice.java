@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 
 @RestControllerAdvice
@@ -22,5 +23,10 @@ public class GCAdvice {
 	@ExceptionHandler(EmptyDataException.class)
 	public ResponseEntity<AjaxResult<String>> exceptionAjaxResult(EmptyDataException e) {
 		return new ResponseEntity<>(AjaxResult.<String>builder().result(false).status(400).data(e.getMessage()).desc(Constant.DESC_EMPTY_ERROR).build(), HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+	public ResponseEntity<AjaxResult<String>> exceptionAjaxResult(MethodArgumentTypeMismatchException e) {
+		return new ResponseEntity<>(AjaxResult.<String>builder().result(false).status(400).data(e.getMessage()).desc(Constant.DESC_MISMATCH_ERROR).build(), HttpStatus.BAD_REQUEST);
 	}
 }

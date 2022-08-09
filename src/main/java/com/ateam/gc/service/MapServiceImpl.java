@@ -65,7 +65,7 @@ public class MapServiceImpl implements MapService {
 	}
 
 	@Override
-	public GoCampDetailResDTO getDetail(String contentId) throws EmptyDataException {
+	public GoCampDetailResDTO getDetail(Integer contentId) throws EmptyDataException {
 		GoCampDetailResDTO result = null;
 		ValueOperations<String, String> operations = redisTemplate.opsForValue();
 		ObjectMapper mapper = new ObjectMapper();
@@ -79,9 +79,9 @@ public class MapServiceImpl implements MapService {
 			JSONArray array = new JSONArray(str);
 			for (int j = 0; j < array.length(); j++) {
 				JSONObject item = array.getJSONObject(j);
-				String itemContentId = item.getString("contentId");
+				int itemContentId = item.getInt("contentId");
 
-				if (contentId.equals(itemContentId)) {
+				if (contentId == itemContentId) {
 					try {
 						result = mapper.readValue(item.toString(), GoCampDetailResDTO.class);
 					} catch (JsonProcessingException e) {

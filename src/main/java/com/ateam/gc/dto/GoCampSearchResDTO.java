@@ -14,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class GoCampSearchResDTO {
 	@ApiModelProperty(value = "콘텐츠 ID")
-	String contentId;
+	int contentId;
 
 	@ApiModelProperty(value = "야영장명")
 	String facltNm;

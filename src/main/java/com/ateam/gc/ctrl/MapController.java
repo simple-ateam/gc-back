@@ -14,7 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -33,8 +33,8 @@ public class MapController {
 
 	@GetMapping(value = "/detail/{contentId}")
 	public ResponseEntity<AjaxResult<GoCampDetailResDTO>> main(
-			@Valid @NotBlank(message = "콘텐츠 ID를 입력해주세요.")
-			@PathVariable("contentId") @ApiParam(value = "콘텐츠 ID", example = "7323") String contentId) throws EmptyDataException {
+			@Valid @Positive(message = "콘텐츠 ID는 양수로 입력해주세요.")
+			@PathVariable("contentId") @ApiParam(value = "콘텐츠 ID", example = "7323") Integer contentId) throws EmptyDataException {
 		return new ResponseEntity<>(AjaxResult.<GoCampDetailResDTO>builder().data(mapService.getDetail(contentId)).build(), HttpStatus.OK);
 	}
 }

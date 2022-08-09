@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface MapService {
 	List<GoCampSearchResDTO> findResult(GoCampSearchReqDTO param);
-	GoCampDetailResDTO getDetail(String contentId) throws EmptyDataException;
+	GoCampDetailResDTO getDetail(Integer contentId) throws EmptyDataException;
 }
