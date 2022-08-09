@@ -3,16 +3,15 @@ package com.ateam.gc.common;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+@ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.ANY)
-@AllArgsConstructor
 @Data
 @ApiModel(value = "API응답공통모델", description = "API응답공통모델")
 public class AjaxResult<T> {
