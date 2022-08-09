@@ -5,7 +5,7 @@ import com.ateam.gc.dto.GoCampDetailResDTO;
 import com.ateam.gc.dto.GoCampSearchReqDTO;
 import com.ateam.gc.dto.GoCampSearchResDTO;
 import com.ateam.gc.service.MapService;
-import com.ateam.gc.service.common.EmptyDataException;
+import com.ateam.gc.common.EmptyDataException;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

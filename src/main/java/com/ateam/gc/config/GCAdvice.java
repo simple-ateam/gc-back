@@ -2,7 +2,7 @@ package com.ateam.gc.config;
 
 import com.ateam.gc.common.AjaxResult;
 import com.ateam.gc.common.Constant;
-import com.ateam.gc.service.common.EmptyDataException;
+import com.ateam.gc.common.EmptyDataException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
