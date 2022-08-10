@@ -7,6 +7,9 @@ public class Constant {
 	public static final String API_GO_CAMP_CALL_DATE = "go_camp_call_date";
 
 	public static final String API_ENCODING_TYPE = "UTF-8";
+	public static final String DESC_SUCCESS = "정상적으로 처리되었습니다.";
+	public static final String DESC_EMPTY_ERROR = "일치하는 데이터가 없습니다.";
+	public static final String DESC_MISMATCH_ERROR = "파라미터 자료형이 일치하지 않습니다.";
 
 	private Constant() {
 		throw new IllegalStateException("Utility class");

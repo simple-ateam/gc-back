@@ -1,8 +1,9 @@
 package com.ateam.gc.service;
 
 import com.ateam.gc.common.Constant;
-import com.ateam.gc.dto.GoCampSearchReqDTO;
+import com.ateam.gc.common.EmptyDataException;
 import com.ateam.gc.dto.GoCampDetailResDTO;
+import com.ateam.gc.dto.GoCampSearchReqDTO;
 import com.ateam.gc.dto.GoCampSearchResDTO;
 import com.ateam.gc.util.DistanceComparator;
 import com.ateam.gc.util.MapUtil;
@@ -47,7 +48,7 @@ public class MapServiceImpl implements MapService {
 				double diff = MapUtil.distance(param.getMapX(), param.getMapY(), item.getDouble("mapX"), item.getDouble("mapY"));
 
 				if (param.getKilometer() > diff) {
-					logger.info("{}km 떨어짐 (합격) - {}", diff, item.getString("facltNm"));
+//					logger.info("{}km 떨어짐 (합격) - {}", diff, item.getString("facltNm"));
 					try {
 						GoCampSearchResDTO goCampSearchResDTO = mapper.readValue(item.toString(), GoCampSearchResDTO.class);
 						goCampSearchResDTO.setDistance(diff);
@@ -64,7 +65,7 @@ public class MapServiceImpl implements MapService {
 	}
 
 	@Override
-	public GoCampDetailResDTO getDetail(String contentId) {
+	public GoCampDetailResDTO getDetail(Integer contentId) throws EmptyDataException {
 		GoCampDetailResDTO result = null;
 		ValueOperations<String, String> operations = redisTemplate.opsForValue();
 		ObjectMapper mapper = new ObjectMapper();
@@ -78,9 +79,9 @@ public class MapServiceImpl implements MapService {
 			JSONArray array = new JSONArray(str);
 			for (int j = 0; j < array.length(); j++) {
 				JSONObject item = array.getJSONObject(j);
-				String itemContentId = item.getString("contentId");
+				int itemContentId = item.getInt("contentId");
 
-				if (contentId.equals(itemContentId)) {
+				if (contentId == itemContentId) {
 					try {
 						result = mapper.readValue(item.toString(), GoCampDetailResDTO.class);
 					} catch (JsonProcessingException e) {
@@ -89,6 +90,9 @@ public class MapServiceImpl implements MapService {
 				}
 			}
 		}
+
+		if (result == null) throw new EmptyDataException();
+
 		return result;
 	}
 }

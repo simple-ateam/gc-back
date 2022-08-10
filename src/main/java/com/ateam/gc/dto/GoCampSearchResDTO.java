@@ -1,18 +1,20 @@
 package com.ateam.gc.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+@ApiModel(value = "고캠프 검색 응답DTO", description = "고캠프 검색 응답DTO")
 @Setter
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class GoCampSearchResDTO {
 	@ApiModelProperty(value = "콘텐츠 ID")
-	String contentId;
+	int contentId;
 
 	@ApiModelProperty(value = "야영장명")
 	String facltNm;
@@ -83,12 +85,14 @@ public class GoCampSearchResDTO {
 	@ApiModelProperty(value = "시군구")
 	String sigunguNm;
 
+	@JsonIgnore
 	@ApiModelProperty(value = "우편번호")
 	String zipcode;
 
 	@ApiModelProperty(value = "주소")
 	String addr1;
 
+	@JsonIgnore
 	@ApiModelProperty(value = "주소상세")
 	String addr2;
 
