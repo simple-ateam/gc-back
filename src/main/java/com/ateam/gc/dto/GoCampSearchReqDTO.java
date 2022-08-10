@@ -5,10 +5,12 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.Positive;
 
+@ToString
 @ApiModel(value = "고캠프 검색 요청DTO", description = "고캠프 검색 요청DTO")
 @Setter
 @Getter

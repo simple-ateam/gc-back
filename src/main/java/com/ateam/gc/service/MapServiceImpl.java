@@ -1,10 +1,10 @@
 package com.ateam.gc.service;
 
 import com.ateam.gc.common.Constant;
-import com.ateam.gc.dto.GoCampSearchReqDTO;
-import com.ateam.gc.dto.GoCampDetailResDTO;
-import com.ateam.gc.dto.GoCampSearchResDTO;
 import com.ateam.gc.common.EmptyDataException;
+import com.ateam.gc.dto.GoCampDetailResDTO;
+import com.ateam.gc.dto.GoCampSearchReqDTO;
+import com.ateam.gc.dto.GoCampSearchResDTO;
 import com.ateam.gc.util.DistanceComparator;
 import com.ateam.gc.util.MapUtil;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -48,7 +48,7 @@ public class MapServiceImpl implements MapService {
 				double diff = MapUtil.distance(param.getMapX(), param.getMapY(), item.getDouble("mapX"), item.getDouble("mapY"));
 
 				if (param.getKilometer() > diff) {
-					logger.info("{}km 떨어짐 (합격) - {}", diff, item.getString("facltNm"));
+//					logger.info("{}km 떨어짐 (합격) - {}", diff, item.getString("facltNm"));
 					try {
 						GoCampSearchResDTO goCampSearchResDTO = mapper.readValue(item.toString(), GoCampSearchResDTO.class);
 						goCampSearchResDTO.setDistance(diff);
